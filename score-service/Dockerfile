@@ -7,7 +7,8 @@ COPY pom.xml /build/pom.xml
 COPY common /build/common
 COPY score-service /build/score-service
 
-RUN mvn -f /build/pom.xml install -pl common -am -DskipTests
+RUN mvn -f /build/pom.xml -N install
+RUN mvn -f /build/pom.xml install -pl common -DskipTests
 RUN mvn -f /build/pom.xml package -pl score-service -DskipTests
 
 # ===== 第二阶段：运行 =====

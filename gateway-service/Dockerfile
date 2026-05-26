@@ -7,7 +7,8 @@ COPY pom.xml /build/pom.xml
 COPY common /build/common
 COPY gateway-service /build/gateway-service
 
-RUN mvn -f /build/pom.xml install -pl common -am -DskipTests
+RUN mvn -f /build/pom.xml -N install
+RUN mvn -f /build/pom.xml install -pl common -DskipTests
 RUN mvn -f /build/pom.xml package -pl gateway-service -DskipTests
 
 # ===== 第二阶段：运行 =====
