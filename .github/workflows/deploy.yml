@@ -1,0 +1,51 @@
+name: Build and Push to Azure Container Registry
+
+# 触发条件：push 到 main 分支时自动运行
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 第一步：拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 第二步：登录 Azure Container Registry
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      # 第三步：构建并推送 student-service 镜像
+      - name: Build and push student-service
+        uses: docker/build-push-action@v5
+        with:
+          context: .                                        # 构建上下文：项目根目录
+          file: ./student-service/Dockerfile               # 指定 Dockerfile 路径
+          push: true
+          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/student-service:latest
+
+      # 第四步：构建并推送 score-service 镜像
+      - name: Build and push score-service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./score-service/Dockerfile
+          push: true
+          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/score-service:latest
+
+      # 第五步：构建并推送 gateway-service 镜像
+      - name: Build and push gateway-service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./gateway-service/Dockerfile
+          push: true
+          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/gateway-service:latest
