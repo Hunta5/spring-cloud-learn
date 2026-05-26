@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onycom.score.mapper.ScoreMapper">
+
+    <select id="findByStudentId" resultType="Score">
+        SELECT * FROM score WHERE student_id = #{studentId}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO score (student_id, subject, score, created_at, updated_at)
+        VALUES (#{studentId}, #{subject}, #{score}, NOW(), NOW())
+    </insert>
+
+</mapper>

@@ -1,0 +1,27 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: score-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/java_learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.onycom.score.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com.onycom.score.mapper: debug

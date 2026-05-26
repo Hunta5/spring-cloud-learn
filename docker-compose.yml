@@ -1,0 +1,49 @@
+services:
+
+  # ==================== MySQL（专门给 Nacos 用）====================
+  nacos-mysql:
+    image: mysql:8.0
+    platform: linux/amd64
+    container_name: nacos-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: nacos
+      MYSQL_CHARSET: utf8mb4
+    ports:
+      - "3308:3306"           # 用3308避免和已有的MySQL 3306冲突
+    volumes:
+      - nacos_mysql_data:/var/lib/mysql
+      - ./nacos-init.sql:/docker-entrypoint-initdb.d/nacos-init.sql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== Nacos 注册中心 ====================
+  nacos:
+    image: nacos/nacos-server:v2.3.2
+    platform: linux/amd64
+    container_name: nacos-learn
+    restart: always
+    ports:
+      - "8848:8848"           # 主端口（管理界面 + 服务注册）
+      - "9848:9848"           # gRPC 端口（Nacos 2.x 必须开）
+    environment:
+      MODE: standalone
+      SPRING_DATASOURCE_PLATFORM: mysql
+      MYSQL_SERVICE_HOST: nacos-mysql      # 指向上面的 MySQL 容器
+      MYSQL_SERVICE_PORT: 3306
+      MYSQL_SERVICE_DB_NAME: nacos
+      MYSQL_SERVICE_USER: root
+      MYSQL_SERVICE_PASSWORD: 123456
+      MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
+    depends_on:
+      nacos-mysql:
+        condition: service_healthy  # 等 MySQL 健康检查通过后再启动
+
+# ==================== 数据卷 ====================
+volumes:
+  nacos_mysql_data:

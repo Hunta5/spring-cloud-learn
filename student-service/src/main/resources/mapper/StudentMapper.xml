@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onycom.student.mapper.StudentMapper">
+
+    <!-- 查询所有 -->
+    <select id="findAll" resultType="Student">
+        SELECT * FROM student
+    </select>
+
+    <!-- 根据ID查询 -->
+    <select id="findById" resultType="Student">
+        SELECT * FROM student WHERE id = #{id}
+    </select>
+
+    <!-- 插入 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO student (name, age, email, created_at, updated_at)
+        VALUES (#{name}, #{age}, #{email}, NOW(), NOW())
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update">
+        UPDATE student
+        SET name       = #{name},
+            age        = #{age},
+            email      = #{email},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteById">
+        DELETE FROM student WHERE id = #{id}
+    </delete>
+
+</mapper>

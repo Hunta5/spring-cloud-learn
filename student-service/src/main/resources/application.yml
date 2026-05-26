@@ -1,0 +1,27 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: student-service        # 微服务名称（注册到 Nacos 用这个名字）
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/java_learn?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848   # Nacos 服务器地址
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.onycom.student.entity
+  configuration:
+    map-underscore-to-camel-case: true   # student_name → studentName 自动转换
+
+logging:
+  level:
+    com.onycom.student.mapper: debug     # 打印 SQL 方便调试

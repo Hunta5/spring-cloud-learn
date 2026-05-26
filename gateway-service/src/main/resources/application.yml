@@ -1,0 +1,29 @@
+server:
+  port: 8080   # 网关统一入口端口
+
+spring:
+  application:
+    name: gateway-service
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+    gateway:
+      routes:
+        # student-service 路由规则
+        - id: student-service
+          uri: lb://student-service        # lb:// = 负载均衡，从 Nacos 找服务地址
+          predicates:
+            - Path=/api/students/**        # 匹配 /api/students/ 开头的请求
+          filters:
+            - StripPrefix=1               # 去掉 /api 前缀再转发
+
+        # score-service 路由规则
+        - id: score-service
+          uri: lb://score-service
+          predicates:
+            - Path=/api/scores/**
+          filters:
+            - StripPrefix=1
