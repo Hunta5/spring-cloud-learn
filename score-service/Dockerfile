@@ -8,8 +8,8 @@ COPY common /build/common
 COPY score-service /build/score-service
 
 RUN mvn -f /build/pom.xml -N install
-RUN mvn -f /build/pom.xml install -pl common -DskipTests
-RUN mvn -f /build/pom.xml package -pl score-service -DskipTests
+RUN mvn -f /build/common/pom.xml install -DskipTests
+RUN mvn -f /build/score-service/pom.xml package -DskipTests
 
 # ===== 第二阶段：运行 =====
 FROM eclipse-temurin:17-jre-alpine

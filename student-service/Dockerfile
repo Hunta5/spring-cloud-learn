@@ -15,8 +15,8 @@ COPY student-service /build/student-service
 
 # 构建：先安装 common，再打包 student-service
 RUN mvn -f /build/pom.xml -N install
-RUN mvn -f /build/pom.xml install -pl common -DskipTests
-RUN mvn -f /build/pom.xml package -pl student-service -DskipTests
+RUN mvn -f /build/common/pom.xml install -DskipTests
+RUN mvn -f /build/student-service/pom.xml package -DskipTests
 
 # ===== 第二阶段：运行 =====
 FROM eclipse-temurin:17-jre-alpine
