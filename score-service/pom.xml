@@ -53,9 +53,16 @@
 
         <!-- 服务容错 -->
         <!-- Spring Cloud CircuitBreaker + Resilience4j 集成（OpenFeign fallback 必须用这个） -->
+        <!-- 排除 resilience4j-micrometer，避免与 Nacos 内置的 Prometheus 依赖版本冲突 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.github.resilience4j</groupId>
+                    <artifactId>resilience4j-micrometer</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Resilience4j 需要 AOP 支持 -->
