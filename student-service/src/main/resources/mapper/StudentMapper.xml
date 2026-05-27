@@ -35,4 +35,8 @@
         DELETE FROM student WHERE id = #{id}
     </delete>
 
+    <select id="findByUsername" resultType="Student">
+        SELECT * FROM student WHERE username = #{username}
+    </select>
+
 </mapper>
