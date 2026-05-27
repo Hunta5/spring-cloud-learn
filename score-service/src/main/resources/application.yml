@@ -26,3 +26,21 @@ mybatis:
 logging:
   level:
     com.onycom.score.mapper: debug
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      studentService:                    # 熔断器的名字，后面代码里会用到
+        sliding-window-size: 10          # 统计最近10次调用
+        failure-rate-threshold: 50       # 失败率超过50%就熔断
+        wait-duration-in-open-state: 10s # 熔断后等10秒再尝试恢复
+        permitted-number-of-calls-in-half-open-state: 3  # 半开状态允许3次试探
+
+  timelimiter:
+    instances:
+      studentService:
+        timeout-duration: 3s             # 超过3秒没响应就超时
+
+feign:
+  circuitbreaker:
+    enabled: true 
