@@ -34,8 +34,15 @@ public class ScoreServiceImpl implements ScoreService {
         // 3. 组合数据返回
         ScoreResponse response = new ScoreResponse();
         response.setStudentId(studentId);
-        response.setStudentName(student.getName());
-        response.setStudentEmail(student.getEmail());
+        if (student != null) {
+            // 正常情况：填充学生信息
+            response.setStudentName(student.getName());
+            response.setStudentEmail(student.getEmail());
+        } else {
+            // 降级情况：学生信息用默认值
+            response.setStudentName("未知");
+            response.setStudentEmail("未知");
+        }
 
         List<ScoreResponse.SubjectScore> subjectScores = scores.stream().map(s -> {
             ScoreResponse.SubjectScore ss = new ScoreResponse.SubjectScore();
