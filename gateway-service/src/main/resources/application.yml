@@ -9,6 +9,7 @@ spring:
     nacos:
       discovery:
         server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8848}
+        fail-fast: false    # 连接失败时不崩溃，后台重试
 
     gateway:
       routes:
