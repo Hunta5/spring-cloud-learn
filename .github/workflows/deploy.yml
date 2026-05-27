@@ -31,7 +31,9 @@ jobs:
           context: .
           file: ./student-service/Dockerfile
           push: true
-          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/student-service:latest
+          tags: |
+            ${{ secrets.REGISTRY_LOGIN_SERVER }}/student-service:latest
+            ${{ secrets.REGISTRY_LOGIN_SERVER }}/student-service:${{ github.sha }}
 
       # 第四步：构建并推送 score-service 镜像
       - name: Build and push score-service
@@ -40,7 +42,9 @@ jobs:
           context: .
           file: ./score-service/Dockerfile
           push: true
-          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/score-service:latest
+          tags: |
+            ${{ secrets.REGISTRY_LOGIN_SERVER }}/score-service:latest
+            ${{ secrets.REGISTRY_LOGIN_SERVER }}/score-service:${{ github.sha }}
 
       # 第五步：构建并推送 gateway-service 镜像
       - name: Build and push gateway-service
@@ -49,7 +53,9 @@ jobs:
           context: .
           file: ./gateway-service/Dockerfile
           push: true
-          tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/gateway-service:latest
+          tags: |
+            ${{ secrets.REGISTRY_LOGIN_SERVER }}/gateway-service:latest
+            ${{ secrets.REGISTRY_LOGIN_SERVER }}/gateway-service:${{ github.sha }}
 
   deploy:
     name: 部署到 Azure Container Apps
@@ -63,7 +69,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # 第二步：部署 student-service
+      # 第二步：部署 student-service（用 commit SHA 做镜像 tag，强制创建新 revision）
       - name: Deploy student-service
         uses: azure/cli@v2
         with:
@@ -72,7 +78,7 @@ jobs:
             az containerapp update \
               --name student-service \
               --resource-group spring-cloud-rg \
-              --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/student-service:latest \
+              --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/student-service:${{ github.sha }} \
               --set-env-vars \
                 "DB_HOST=${{ secrets.DB_HOST }}" \
                 "DB_USERNAME=${{ secrets.DB_USERNAME }}" \
@@ -89,7 +95,7 @@ jobs:
             az containerapp update \
               --name score-service \
               --resource-group spring-cloud-rg \
-              --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/score-service:latest \
+              --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/score-service:${{ github.sha }} \
               --set-env-vars \
                 "DB_HOST=${{ secrets.DB_HOST }}" \
                 "DB_USERNAME=${{ secrets.DB_USERNAME }}" \
@@ -106,7 +112,7 @@ jobs:
             az containerapp update \
               --name gateway-service \
               --resource-group spring-cloud-rg \
-              --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/gateway-service:latest \
+              --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/gateway-service:${{ github.sha }} \
               --set-env-vars \
                 "NACOS_HOST=nacos-app" \
                 "NACOS_PORT=8848"

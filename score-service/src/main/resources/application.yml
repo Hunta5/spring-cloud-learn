@@ -17,6 +17,10 @@ spring:
         server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8848}
         fail-fast: false    # 连接失败时不崩溃，后台重试
 
+    openfeign:
+      circuitbreaker:
+        enabled: true       # 开启 Feign 和 Resilience4j 的集成（Spring Boot 3.x 写法）
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.onycom.score.entity
@@ -41,6 +45,3 @@ resilience4j:
       studentService:
         timeout-duration: 3s             # 超过3秒没响应就超时
 
-feign:
-  circuitbreaker:
-    enabled: true
