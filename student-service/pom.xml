@@ -39,12 +39,23 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
             <version>2023.0.1.0</version>
         </dependency>
+        <!-- Kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
 
         <!-- 引入公共模块 -->
         <dependency>
             <groupId>com.onycom</groupId>
             <artifactId>common</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <!-- BCrypt 密码加密（生产级别密码比对）-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
         </dependency>
     </dependencies>
 

@@ -8,9 +8,9 @@ public class Student {
     private Long id;
     private String name;
     private Integer age;
+    private String gender;
     private String email;
     private String username;
     private String password;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createTime;
 }

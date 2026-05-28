@@ -21,6 +21,14 @@ spring:
       circuitbreaker:
         enabled: true       # 开启 Feign 和 Resilience4j 的集成（Spring Boot 3.x 写法）
 
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST:localhost}:9092
+    consumer:
+      group-id: score-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.onycom.score.entity
